@@ -291,5 +291,6 @@ $(function() {
     return xpath;
   } 
 
-
+// Temporaneo per survey W4A2012
+    $.farfalla_set_option('id',40);
 });
