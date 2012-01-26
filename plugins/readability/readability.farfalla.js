@@ -2,6 +2,9 @@
 
 $(function() {  
 
+
+
+
 // Create dialog form
   $('body').append('<div id="dialog-form"></div>');
   $('#dialog-form').append('<p class="farfalla_alttext_form">Add an alternative text for the image</p>');
@@ -56,15 +59,44 @@ $(function() {
 
 
 // Calculate the readability of a single block
-  $.fn.elab = function (val) {   
-    $(this).wrap('<div class="farfalla_readability" id="readability_'+val+'">Readability index: <span class="farfalla_readability_score" id="readability_score_'+val+'"></span> <a href="#" id="farfalla_suggest_'+val+'">Suggest your own version</a></div>');
-    var words=$(this).html().split(" ");
+// inspired by the code at http://xoomer.virgilio.it/roberto-ricci/variabilialeatorie/esperimenti/leggibilita.htm
+
+  $.fn.gulpease = function (content, val) {
+    content = $.htmlClean(content, {allowedTags:['*'], removeTags:['img']});
+    var words = content.split(" ");
     var nW=words.length;
     var lW=0;
     for (var i=0; i<nW; i++) lW += words[i].length;
-    var sentences=$(this).html().split(/[.;!?\n]+/);
+    var sentences=content.split(/[.;!?\n]+ /);
     var nS=sentences.length;
-    $('#readability_score_'+val).html(Math.round(89 - (10 *lW / nW ) + (300*nS/nW)))
+    if(nW==1 && nS<3){
+      return false;
+    } else {
+      var readability = 100;
+      var score = Math.round(89 - (10 *lW / nW ) + (300*nS/nW));
+      // readability maximum is 100, all higher scores are ignored
+      if(readability>score){ readability = score };
+      // readability minimum is 0, all lower scores are ignored
+      if(score<0){ readability = 0 }
+//      $(this).wrap('<div class="farfalla_readability" id="readability_'+val+'">Readability index: <span class="farfalla_readability_score" id="readability_score_'+val+'"></span> <!-- <a href="#" id="farfalla_suggest_'+val+'">Suggest your own version</a>--></div>');
+//      $('#readability_score_'+val).html(lW+','+nW+','+nS+','+Math.round(89 - (10 *lW / nW ) + (300*nS/nW))) // for debug
+//      $('#readability_score_'+val).html(readability);
+      return readability;
+    }
+  }
+
+  $.fn.readabilityLevel = function ( readability ) {
+	$(this).addClass('ui-corner-all');
+	$(this).css('padding','1ex');
+    if(readability>=75){
+      $(this).css('border','3px solid green');
+    } else if(readability<75 && readability>=50) {
+      $(this).css('border','3px solid orange');
+    } else if(readability<50 && readability>=25) {
+      $(this).css('border','3px solid yellow');
+    } else if(readability<25) {
+      $(this).css('border','3px solid red');
+    }
   }
 
 // Create the interface for the insertion of alternative text   
@@ -94,15 +126,40 @@ $(function() {
       
   };
 
+  var page_readability = 0;
+  var readable = 0;
+  var page_text = '';
+  
+  jQuery.getScript(farfalla_path +'libs/jquery.htmlClean-min.js', function(){ 
+    $("p:not(.farfalla_alttext_form)").each(
+      function(index){
+        var read = $(this).gulpease($(this).html(),index);
+		if(read!=false){	
+          $(this).readabilityLevel(read);
+          readable = readable+=1;
+          page_readability = page_readability+=read;
+          page_text = page_text+$(this).html()+'. ';
+        }
+      }
+    );
 
+  
+// number of valid paragraphs
+//   console.log(readable);
+// sum of single paragraph readability scores 
+//   console.log(page_readability);
+// mean readability
+  console.log(page_readability/readable);
 
-  $("p:not(.farfalla_alttext_form)").each(
-    function(index){
-      $(this).elab(index);
-      $(this).addalt(index);
-      var xpath = $.getXPath(this);
-    }
-  );
+//  number of sentences
+//  console.log($.htmlClean(page_text, {allowedTags:['*'], removeTags:['img']}).split(/[.;!?\n]+ /).length)
+// complete text of the page
+//  console.log($.htmlClean(page_text, {allowedTags:['*'], removeTags:['img']}))
+// gulpease index
+  console.log($('body').gulpease(page_text));
+    
+  });
+
 
 
 });

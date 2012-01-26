@@ -3,11 +3,11 @@
 	<fieldset>
 		<legend><?php __('Add Count'); ?></legend>
 	<?php
-		echo $this->Form->input('participant');
 		echo $this->Form->input('url');
 		echo $this->Form->input('lw');
 		echo $this->Form->input('nw');
 		echo $this->Form->input('ns');
+		echo $this->Form->input('readability');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

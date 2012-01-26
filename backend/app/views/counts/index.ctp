@@ -3,11 +3,11 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('participant');?></th>
 			<th><?php echo $this->Paginator->sort('url');?></th>
 			<th><?php echo $this->Paginator->sort('lw');?></th>
 			<th><?php echo $this->Paginator->sort('nw');?></th>
 			<th><?php echo $this->Paginator->sort('ns');?></th>
+			<th><?php echo $this->Paginator->sort('readability');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -22,11 +22,11 @@
 	?>
 	<tr<?php echo $class;?>>
 		<td><?php echo $count['Count']['id']; ?>&nbsp;</td>
-		<td><?php echo $count['Count']['participant']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['url']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['lw']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['nw']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['ns']; ?>&nbsp;</td>
+		<td><?php echo $count['Count']['readability']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['created']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['modified']; ?>&nbsp;</td>
 		<td class="actions">
