@@ -3,8 +3,11 @@
 $(function() {  
 
 
-
-
+// Set some initial variables
+   var totalLW = 0;
+   var totalNW = 0;
+   var totalNS = 0;
+   
 // get the current page URL
   var url = $(location).attr('href');
 
@@ -76,27 +79,26 @@ $(function() {
     $("p").each(
       function(index){
         var read = $(this).gulpease($(this).html(),index);
-		if(read[3]!=false){	
+		if(read[3] && read[3]!=false){	
           $(this).readabilityLevel(read[3]);
-//  Comment the following line to stop logging to the database
+          totalLW += read[0];
+          totalNW += read[1];
+          totalNS += read[2];
 //          $.submitCount(url, read[0], read[1], read[2], read[3]);
         }
       }
     );
-
-
-// Uncomment the following for debug purpose
-
-// number of valid paragraphs
-   console.log(readable);
-// sum of single paragraph readability scores 
-   console.log(page_readability);
-// mean readability
-  console.log(page_readability/readable);
     
+    var total_readability =  Math.round(89 - (10 *totalLW / totalNW ) + (300*totalNS/totalNW));
+    var total_readability_rev =  Math.round(89 + (300 * totalNS - 10 * totalLW)/totalNW);
+    var total_readability_rev_2 =  Math.round(89 - (totalLW * 100 / totalNW )/10 + 3*(totalNS*100/totalNW));
+    
+    console.log(total_readability);
+    console.log(total_readability_rev);
+    console.log(total_readability_rev_2);
+
+
   });
-
-
 
 });
 
