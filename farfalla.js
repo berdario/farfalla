@@ -101,3 +101,4 @@ $LAB
   head.js(farfalla_path+'libs/jquery.min.js', farfalla_path+'libs/jquery-ui.custom.min.js', farfalla_path+'libs/main.js', function() {
  
 });
+
