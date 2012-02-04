@@ -8,6 +8,7 @@
 		echo $this->Form->input('nw');
 		echo $this->Form->input('ns');
 		echo $this->Form->input('readability');
+		echo $this->Form->input('position');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit', true));?>

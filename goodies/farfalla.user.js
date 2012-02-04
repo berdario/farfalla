@@ -2,8 +2,12 @@
 // @name           Farfalla
 // @namespace      userscripts.org
 // @description    Injects Farfalla helper
-// @version        0.2
-// @include       //
+// @version        0.3.3.1
+// @match          http://*/*
+// @exclude_match  http://*.facebook.com/*
+// @permissions    http://*/
+// @include        *
+// @exclude        http://*.facebook.com/*
 //
 // Farfalla - Accessibility in the Cloud
 // http://farfalla-project.org/
@@ -28,7 +32,7 @@ function fgetScripts(s){
 if (fgetScripts('farfalla.js')){
 	var headID = document.getElementsByTagName("head")[0];         
 	var farfallaScript = document.createElement('script');
-	var farfalla_path = 'http://code.farfalla-project.org/';
+	var farfalla_path = 'http://farfalla-project.org/code/';
 	farfallaScript.type = 'text/javascript';
 	farfallaScript.src = farfalla_path+'farfalla.js';
 	headID.appendChild(farfallaScript);

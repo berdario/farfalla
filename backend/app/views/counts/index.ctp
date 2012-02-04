@@ -8,6 +8,7 @@
 			<th><?php echo $this->Paginator->sort('nw');?></th>
 			<th><?php echo $this->Paginator->sort('ns');?></th>
 			<th><?php echo $this->Paginator->sort('readability');?></th>
+			<th><?php echo $this->Paginator->sort('position');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -27,6 +28,7 @@
 		<td><?php echo $count['Count']['nw']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['ns']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['readability']; ?>&nbsp;</td>
+		<td><?php echo $count['Count']['position']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['created']; ?>&nbsp;</td>
 		<td><?php echo $count['Count']['modified']; ?>&nbsp;</td>
 		<td class="actions">
