@@ -25,19 +25,14 @@ jQuery.noConflict();
       $('body').width("");
     }
 
-    $.farfalla_get_option('increase', function(data){
+    $.farfalla_get_option('increase', function(key, value){
 
-        var increase = 0
-
+		var increase = parseFloat(data.value);
         // restore font size on plugin load
 
-        var value = 1+(0.1*data.value);
+        var value = 1+(0.1*value);
 
         $.farfalla_change_size(value);
-
-        if(data.value){
-          var increase = parseFloat(data.value);
-        }
 
         // Increase Font Size
         $.farfalla_add_ui('fontsize', 'button', 'fontsize_increase', '+', function(){
@@ -83,17 +78,14 @@ jQuery.noConflict();
 
       $('#fontsizeActivator').farfalla_switch_on('fontsize');
 
-      $.farfalla_get_option('increase', function(data){
+      $.farfalla_get_option('increase', function(key, value){
 
         // restore font size on plugin activation
+        var increase = parseFloat(value);
 
-        var value = 1+(0.1*data.value);
+        var value = 1+(0.1*value);
 
         $.farfalla_change_size(value);
-
-        if(data.value){
-          var increase = parseFloat(data.value);
-        }
 
         $('.plugin_options').not('#fontsize_options').slideUp('fast');
         $('#fontsize_options').slideDown('fast');

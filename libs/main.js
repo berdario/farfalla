@@ -2,6 +2,137 @@
 jQuery.noConflict();
 (function($) {
   $(function() {
+      
+    var storage = new CrossDomainStorage("http://localhost", "/libs/crossdomainstorage/storagehandler.html");
+    var toolbar_metadata = {
+        "ui": {
+            "choose": "Choose your profile...",
+            "logo": "Click on the Farfalla logo to show or hide the toolbar",
+            "handle": "<strong>Drag the bar up and down from here</strong><br />The position will be remembered",
+            "home": "Go to <strong>Farfalla project</strong> website"
+        },
+        "plugins": [{
+            "Plugin": {
+                "id": "1",
+                "name": "magnifier",
+                "visible": true
+            }
+        }, {
+            "Plugin": {
+                "id": "2",
+                "name": "keyboard",
+                "visible": true
+            }
+        }, {
+            "Plugin": {
+                "id": "3",
+                "name": "text-to-speech",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "4",
+                "name": "fontsize",
+                "visible": true
+        }
+        }, {
+            "Plugin": {
+                "id": "6",
+                "name": "hicontrast",
+                "visible": true
+            }
+        }, {
+            "Plugin": {
+                "id": "7",
+                "name": "addalt",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "18",
+                "name": "imagination",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "19",
+                "name": "virtual-mouse",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "9",
+                "name": "bigcursor",
+                "visible": true
+            }
+        }, {
+            "Plugin": {
+                "id": "10",
+                "name": "fivekeys",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "11",
+                "name": "step-by-step",
+                "visible": false
+        }
+        }, {
+            "Plugin": {
+                "id": "12",
+                "name": "selection",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "13",
+                "name": "jplayer",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "14",
+                "name": "dasher",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "15",
+                "name": "readability",
+                "visible": false
+            }
+        }, {
+            "Plugin": {
+                "id": "17",
+                "name": "clarifier",
+                "visible": true
+            }
+        }]
+    }
+
+      var detected_language = "en";
+      var strings = new Array(
+          "ft_farfalla_project"
+          ,"ft_accessibility_preferences"
+          ,"ft_actions"
+          ,"save_session"
+          ,"reset"
+          ,"hicontrast"
+          ,"fontsize"
+          ,"clarifier"
+          ,"magnifier"
+          ,"keyboard"
+          ,"bigcursor"
+          ,"Color_schemes"
+          ,"Actions"
+      );
+      
+      // XXX these need to be localized
+      var translations = new Array(
+          "Farfalla project","Accessibility Preferences","Actions","Save current settings for the future","Reset all settings","Contrast and color scheme control","Font size control","High readability","Selective magnification","Onscreen virtual keyboard","Larger mouse cursor","Color schemes","Actions"
+      );
+      
+
 
     // Inclusion of the needed css stylesheets
 
@@ -188,30 +319,13 @@ jQuery.noConflict();
       $('#farfalla_buttons').show();
     };
 
-    // A function for getting options from the Cakephp session array
+    // A function for getting options
 
-    $.farfalla_get_option = function( option, callback ){
+    $.farfalla_get_option = storage.getValue;
 
-      $.getJSON(
-         farfalla_path+"backend/plugins/get_option/"+option+"/?callback=?",
-         {}, callback
-      );
+    // A function for setting options
 
-    };
-
-    // A function for setting options in the Cakephp session array
-
-    $.farfalla_set_option = function( option, value ){
-
-      if(value==null){
-        $.getJSON(farfalla_path+"backend/plugins/set_option/"+option+"/?callback=?");
-
-      } else {
-        $.getJSON(farfalla_path+"backend/plugins/set_option/"+option+"/"+value+"/?callback=?");
-
-      }
-
-    };
+    $.farfalla_set_option = storage.setValue;
 
     // A function for getting the XPath of an element
 
@@ -254,7 +368,7 @@ jQuery.noConflict();
         // Parses the options passed along while including farfalla.js
 
         function farfalla_ui_options() {
-		  // if no options are passed, this is skipped (thanks to the "?" in the matching string)
+          // if no options are passed, this is skipped (thanks to the "?" in the matching string)
           var source = $("script[src*='farfalla.js?']").attr('src');
           if (source){
             var optStart = source.search('\\?');
@@ -335,21 +449,22 @@ jQuery.noConflict();
               .draggable({
                 'axis':'y',
                 stop: function(event, ui) {
-                  $.getJSON(farfalla_path+"backend/profiles/top/"+$(this).css('top')+"/?callback=?",{});
+                 //save top position
+                    storage.setValue("top-position", $(this).css('top'));
                 }
               });
 
             $('#farfalla_remember_profile')
             .toggle(
               function() {
-				farfalla_remember_profile();
-				remember_profile = 1;
-				$(this).css('background','url("'+farfalla_path+'images/save_selected.png")')
+                farfalla_remember_profile();
+                remember_profile = 1;
+                $(this).css('background','url("'+farfalla_path+'images/save_selected.png")')
               },
               function() {
                 farfalla_forget_profile();
                 remember_profile = 0;
-				$(this).css('background','url("'+farfalla_path+'images/save.png")')
+                $(this).css('background','url("'+farfalla_path+'images/save.png")')
               }
             ).qtip({
               content :  $.__('save_session'),
@@ -367,7 +482,7 @@ jQuery.noConflict();
             .click(function(){
               $('.plugin_options_deactivate').click();
               $('.active').click();
-              $.getJSON(farfalla_path+"backend/profiles/reset/?callback=?",{});
+              storage.clear();
               farfalla_forget_profile();
               remember_profile = 0;
               $('#farfalla_remember_profile').css('background','url("'+farfalla_path+'images/save.png")')
@@ -395,12 +510,7 @@ jQuery.noConflict();
         // Adds the profile selection form
 
         function farfalla_toolbar_populate(top) {
-
-            $.getJSON(
-              farfalla_path+"backend/plugins/menu/?callback=?",
-                {},
-                function(data) {
-                  $.each(data.plugins, function(){
+                  $.each(toolbar_metadata.plugins, function(){
                       var plugin = this.Plugin;
                       $('<div></div>')
                         .attr({
@@ -423,7 +533,7 @@ jQuery.noConflict();
                       })
                       .click( function(){
                           head.js(farfalla_path+'plugins/'+plugin.name+'/'+plugin.name+'.farfalla.js');
-					      $(this).unbind('click'); // first click only!
+                          $(this).unbind('click'); // first click only!
                         }
                       );
 
@@ -436,34 +546,27 @@ jQuery.noConflict();
                     });
 
                     farfalla_autoactivate_plugins();
-
-                  }
-
-                );
-
         };
 
         // Checks if a profile has already been selected, then initializes what is needed
 
         function farfalla_check_status() {
-
-          $.getJSON(farfalla_path+"backend/profiles/status/?callback=?", {},
-            function(data){
-
-              if(data.top) {
-                farfalla_set_top(data.top);
-              } else if (options.top) {
-                farfalla_set_top(options.top);
-              }
-
-              if(data.show==1) {
-                $('#farfalla_badge').click()
-              }
-
-              farfalla_toolbar_populate();
-
+            storage.getValue("top-position", function(key, position){
+                if(position) {
+                    farfalla_set_top(position);
+                } else if (options.top) {
+                      farfalla_set_top(options.top);
+                }
             })
-          };
+            
+              storage.getValue("show-farfalla", function(key, visible){
+                  if (visible) {
+                      $('#farfalla_badge').click()
+                  }
+              })
+
+            farfalla_toolbar_populate();
+        };
 
 
         // Adds the show/hide effect to the toolbar logo
@@ -476,14 +579,14 @@ snapper.open('right');
 //                $('#farfalla_toolbar').show();
                 $('#farfalla_toolbar_shade').show();
 //                $('#farfalla_container').animate({'width':'360px'/*,'left':$(window).width()-360+'px'*/});
-                $.getJSON(farfalla_path+"backend/profiles/show/1/?callback=?",{});
+                storage.setValue("show-farfalla", true);
               },
               function() {
 snapper.close();
 //                $('#farfalla_container').animate({'width':'0'/*,'left':$(window).width()+'px'*/});
 //                $('#farfalla_toolbar').hide();
                 $('#farfalla_toolbar_shade').hide();
-                $.getJSON(farfalla_path+"backend/profiles/show/0/?callback=?",{});
+                storage.setValue("show-farfalla", false);
               }
             );
 
@@ -531,14 +634,12 @@ snapper.close();
             $('#farfalla_remember_profile').click();
           } else {
 
-            $.farfalla_get_option('active_plugins', function(data){
+            $.farfalla_get_option('active_plugins', function(key, value){
 
-              if(data.value){
-                active = data.value.split(',')
+                active = value.split(',')
                 $.each(active, function(index, value){
                   $('#'+value+'Activator').click();
                 })
-              }
 
             })
           }

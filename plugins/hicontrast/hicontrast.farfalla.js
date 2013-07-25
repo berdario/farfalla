@@ -25,13 +25,10 @@ jQuery.noConflict();
       });
     });
 
-    $.farfalla_get_option('colorscheme', function(data){
+    $.farfalla_get_option('colorscheme', function(key, value){
 
       // restore color scheme on load
-
-      if(data.value){
-        $('#hicontrast_'+data.value+'_button').click();
-      }
+      $('#hicontrast_'+value+'_button').click();
 
     });
 
@@ -41,7 +38,8 @@ jQuery.noConflict();
 
       $.farfalla_remove_plugin_css('hicontrast');
       $('#farfalla_active_option input').unwrap();
-      $.farfalla_set_option('colorscheme');
+      // $.farfalla_set_option('colorscheme');
+      // XXX is this really needed?
 
 
     });
@@ -62,7 +60,8 @@ jQuery.noConflict();
       $('#hicontrast_options').hide();
       $.farfalla_remove_plugin_css('hicontrast');
       $('#farfalla_active_option input').unwrap();
-      $.farfalla_set_option('colorscheme');
+      // $.farfalla_set_option('colorscheme');
+      // XXX is this really needed?
 
     }
 
