@@ -57,7 +57,6 @@ CrossDomainStorage.prototype = {
                 request: request,
                 callback: callback
             };
-        console.log(this); // XXX sometimes this is shadowed by something else
         this._sendOrQueue(data);
     },
 

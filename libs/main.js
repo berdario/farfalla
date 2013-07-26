@@ -321,11 +321,11 @@ jQuery.noConflict();
 
     // A function for getting options
 
-    $.farfalla_get_option = storage.getValue;
+    $.farfalla_get_option = function(key, callback){ storage.getValue(key, callback) };
 
     // A function for setting options
 
-    $.farfalla_set_option = storage.setValue;
+    $.farfalla_set_option = function(key, value){ storage.setValue(key, value) };
 
     // A function for getting the XPath of an element
 
@@ -619,7 +619,7 @@ snapper.close();
           if(remember_profile==1){
             farfalla_remember_profile()
           }
-          $.farfalla_set_option('active_plugins',active_plugins);
+          $.farfalla_set_option('active_plugins',active_plugins.join(","));
         }
 
         function farfalla_autoactivate_plugins() {
@@ -636,11 +636,12 @@ snapper.close();
 
             $.farfalla_get_option('active_plugins', function(key, value){
 
-                active = value.split(',')
-                $.each(active, function(index, value){
-                  $('#'+value+'Activator').click();
-                })
-
+                if (value){
+                    active = value.split(',');
+                    $.each(active, function(index, value){
+                        $('#'+value+'Activator').click();
+                    })
+                }
             })
           }
 

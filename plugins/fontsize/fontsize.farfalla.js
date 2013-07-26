@@ -27,7 +27,7 @@ jQuery.noConflict();
 
     $.farfalla_get_option('increase', function(key, value){
 
-		var increase = parseFloat(data.value);
+        var increase = parseFloat(value) || 0;
         // restore font size on plugin load
 
         var value = 1+(0.1*value);
@@ -39,7 +39,6 @@ jQuery.noConflict();
 
           increase+=1;
           var value= 1+(0.1*increase)
-
           $.farfalla_change_size(value);
 
           $.farfalla_set_option('increase',increase);
@@ -51,7 +50,6 @@ jQuery.noConflict();
 
           increase+=-1;
           var value= 1+(0.1*increase)
-
           $.farfalla_change_size(value);
 
           $.farfalla_set_option('increase',increase);
@@ -81,10 +79,9 @@ jQuery.noConflict();
       $.farfalla_get_option('increase', function(key, value){
 
         // restore font size on plugin activation
-        var increase = parseFloat(value);
+        var increase = parseFloat(value) || 0;
 
         var value = 1+(0.1*value);
-
         $.farfalla_change_size(value);
 
         $('.plugin_options').not('#fontsize_options').slideUp('fast');
