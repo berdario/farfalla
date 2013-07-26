@@ -3,7 +3,7 @@ jQuery.noConflict();
 (function($) {
   $(function() {
       
-    var storage = new CrossDomainStorage("http://localhost", "/libs/crossdomainstorage/storagehandler.html");
+    var storage = new CrossDomainStorage("http://farfalla-project.org", "/code/storagehandler.html");
     var toolbar_metadata = {
         "ui": {
             "choose": "Choose your profile...",
